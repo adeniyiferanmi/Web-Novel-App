@@ -1,0 +1,63 @@
+@import "tailwindcss";
+* {
+  box-sizing: border-box;
+}
+.animation-section {
+  animation: scroll 20s linear 1s infinite normal both;
+}
+@keyframes scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  25% {
+    transform: translateX(-25%);
+  }
+  50% {
+    transform: translateX(-50%);
+  }
+  75% {
+    transform: translateX(-75%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+.overflow-section {
+  overflow-x: hidden;
+  height: 800px;
+}
+.slider {
+  animation: slide 30s linear 1s infinite normal both;
+}
+
+@keyframes slide {
+  0%,
+  30% {
+    transform: translateX(0);
+  }
+  33%,
+  63% {
+    transform: translateX(-100vw);
+  }
+  66%,
+  96% {
+    transform: translateX(-200vw);
+  }
+  100% {
+    transform: translateX(-300vw);
+  }
+}
+.scrools {
+  animation: scroll 20s linear 1s infinite normal both;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.drop:hover .drop-down {
+  display: block;
+}
