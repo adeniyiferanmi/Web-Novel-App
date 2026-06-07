@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import logo from "../assets/30f3f2a0795e4fdba284f215d265ab1b.png";
 import image1 from "../assets/photo-1614729939124-032f0b56c9ce.avif";
 import image2 from "../assets/photo-1519074069444-1ba4fff66d16.avif";
@@ -6,8 +6,37 @@ import image3 from "../assets/237d7c90-5990-4e88-9b16-a865cb560d75.png";
 import image4 from "../assets/google-color.svg";
 import image5 from "../assets/Apple_logo_white.svg.png";
 import image7 from "../assets/ap_bo_typecollection_7.webp";
+import { AuthContext } from "../Context/AuthContext";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const LoginPage = () => {
+  const { handlePassword, showPassword, login, signingIn } =
+    useContext(AuthContext);
+
+  const userSchema = yup.object({
+    email: yup
+      .string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    password: yup
+      .string()
+      .min(6, "Password must be at least 6 characters")
+      .required("Password is required"),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(userSchema),
+  });
+
+  const onSubmit = (data) => {
+    login(data);
+  };
   return (
     <div className="flex">
       <section className="bg-[#154126] w-[100%]">
@@ -74,17 +103,28 @@ const LoginPage = () => {
               Sign in to continue your story
             </p>
           </div>
-          <form className="block pt-[30px]">
+          <form className="block pt-[30px]" onSubmit={handleSubmit(onSubmit)}>
             <input
               type="text"
               placeholder="Email address"
               className="bg-white block border-1 border-[#80808060] p-[13px] rounded-xl w-[100%]"
+              {...register("email")}
             />
-            <input
-              type="password"
-              placeholder="Password"
-              className="bg-white block border-1 border-[#80808060] p-[13px] rounded-xl w-[100%] mt-[20px]"
-            />
+            <div className="relative w-[100%]">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                className="bg-white block border-1 border-[#80808060] p-[13px] rounded-xl w-[100%] mt-[20px]"
+                {...register("password")}
+              />
+
+              <span
+                onClick={handlePassword}
+                className="password-toggle absolute right-[15px] top-[25px] transform -translate-y-[50%] cursor-pointer"
+              >
+                <i class={showPassword ? "bi bi-eye" : "bi bi-eye-slash"}></i>
+              </span>
+            </div>
             <a
               href=""
               className="text-right block text-[#EF9D37] text-[0.9rem] mt-[15px] font-serif font-semibold"
@@ -92,7 +132,8 @@ const LoginPage = () => {
               Forgot Password?
             </a>
             <button className="block bg-linear-to-r from-[#EBAF44] to-[#F87618] w-[100%] p-[15px] text-[1.2rem] rounded-full mt-[20px] font-bold">
-              Log In <i class="bi bi-arrow-right "></i>
+              {signingIn ? "Signing In..." : "Log In"}
+              {/* Log In <i class="bi bi-arrow-right "></i> */}
             </button>
           </form>
           <div className="flex text-center mt-[20px] text-[#8080807e]">
