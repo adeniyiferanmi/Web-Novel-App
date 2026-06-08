@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Header from "../UI/Header";
 import HeroSection from "../UI/HeroSection";
 import MarqueeSection from "../UI/MarqueeSection";
@@ -45,11 +45,20 @@ import backgroundImage2 from "../assets/2.webp";
 import backgroundImage3 from "../assets/3.webp";
 import banner from "../assets/bo_banner.webp";
 import Footer from "../UI/Footer";
+import { AuthContext } from "../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
-const HomePage = () => {
+const DashboardPage = () => {
+  const { logout, userData } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+  const navigate = useNavigate();
   return (
     <div>
-      <Header logoLink="/" />
+      <Header logoLink="/dashboard" />
       <HeroSection />
       <MarqueeSection />
       <section className="mt-[70px] w-[95%] m-auto mb-[30px] ">
@@ -960,4 +969,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default DashboardPage;

@@ -194,7 +194,7 @@ const SignUpPage = () => {
               )}
             </div>
           </div>
-          {pick?.title === " I'm an Author" && (
+          {pick?.title === "Author" && (
             <input
               type="text"
               placeholder="Pen Name  {OPTIONAL}"

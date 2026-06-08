@@ -1,5 +1,7 @@
 import React, { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import Cookies from "js-cookie";
 
 export const AuthContext = createContext();
 const BaseUrl = import.meta.env.VITE_API_URL;
@@ -10,6 +12,7 @@ const AuthProvider = ({ children }) => {
   const [signingIn, setSigningIn] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [userData, setUserData] = useState(null);
   const handlePassword = () => {
     setShowPassword((prev) => !prev);
   };
@@ -29,10 +32,10 @@ const AuthProvider = ({ children }) => {
       });
       const res = await response.json();
       if (response.ok) {
-        console.log("Signup successful:", res);
-        navigate("/login");
+        toast.success("Signup successful! Please log in.");
+        navigate("/dashboard");
       } else {
-        console.error("Signup failed:", res);
+        toast.error("Signup failed. Please try again.");
       }
     } catch (error) {
       console.error("An error occurred during signup:", error);
@@ -53,15 +56,48 @@ const AuthProvider = ({ children }) => {
       });
       const result = await response.json();
       if (response.ok) {
-        console.log("Login successful:", result);
-        navigate("/");
+        toast.success("Login successful!");
+        Cookies.set("token", result.token, { expires: 30 });
+        navigate("/dashboard");
       } else {
-        console.error("Signup failed:", res);
+        toast.error("Login failed. Please try again.");
       }
     } catch (error) {
-      console.error("An error occurred during login:", error);
+      toast.error("An error occurred during login. Please try again.");
+      console.log(error);
     } finally {
       setSigningIn(false);
+    }
+  };
+
+  const logout = () => {
+    Cookies.remove("token");
+    setUserData(null);
+  };
+
+  const isAuthenticated = async () => {
+    const token = Cookies.get("token");
+    if (!token) {
+      return false;
+    }
+
+    try {
+      const res = await fetch(`${BaseUrl}/auth/verifytoken`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const result = await res.json();
+      setUserData(result.data);
+      console.log(userData);
+
+      if (res.ok) {
+        return true;
+      }
+    } catch (error) {
+      console.log("Error verifying token:", error);
+      return false;
     }
   };
 
@@ -70,10 +106,13 @@ const AuthProvider = ({ children }) => {
     login,
     handleConfirmPassword,
     handlePassword,
+    isAuthenticated,
+    logout,
     signingUp,
     signingIn,
     showPassword,
     showConfirmPassword,
+    userData,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

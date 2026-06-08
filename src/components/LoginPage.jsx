@@ -151,7 +151,10 @@ const LoginPage = () => {
           </div>
           <div className="justify-center mt-[20px] flex ">
             <p className="text-[#00000080] font-serif"> New to Bokifa? </p>
-            <a href="" className="font-bold ml-[5px] font-serif text-[#EEA73F]">
+            <a
+              href="/signup"
+              className="font-bold ml-[5px] font-serif text-[#EEA73F]"
+            >
               {" "}
               Create account
             </a>
