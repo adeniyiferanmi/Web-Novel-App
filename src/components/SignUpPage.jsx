@@ -22,12 +22,12 @@ const SignUpPage = () => {
   const profiles = [
     {
       id: 1,
-      title: " I'm an Author",
+      title: "Author",
       discription: "Write and publish stories",
     },
     {
       id: 2,
-      title: " I'm a Reader",
+      title: "Reader",
       discription: " Discover & collect novels",
     },
   ];
@@ -36,7 +36,10 @@ const SignUpPage = () => {
       .string()
       .email("Invalid email format")
       .required("Email is required"),
-    fullName: yup.string().required("Full Name is required"),
+    fullName: yup
+      .string()
+      .min(6, "must be at least 6 characters")
+      .required("Full Name is required"),
     password: yup
       .string()
       .min(6, "Password must be at least 6 characters")
@@ -48,7 +51,7 @@ const SignUpPage = () => {
     penName: yup.string(),
     Profile: yup
       .string()
-      .oneOf(["I'm an Author", "I'm a Reader"], "Invalid profile")
+      .oneOf(["Author", "Reader"], "Invalid profile")
       .required("Profile is required"),
   });
   agreedToTerms: yup
@@ -71,7 +74,7 @@ const SignUpPage = () => {
       password: "",
       confirmPassword: "",
       penName: "",
-      profile: localStorage.getItem("profile") || "I'm a Reader",
+      profile: localStorage.getItem("profile") || "Reader",
     },
   });
   const handlePickProfile = (profiler) => {

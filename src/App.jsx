@@ -9,6 +9,9 @@ import { Toaster } from "sonner";
 import DashboardPage from "./components/DashboardPage";
 import ProtectedRoutes from "./Routes/ProtectedRoutes";
 import AuthorDashboardPage from "./components/AuthorDashboardPage";
+import NovelProvider from "./Context/NovelContext";
+import GetSinglePage from "./components/GetSinglePage";
+import AuthorRoutes from "./Routes/AuthorRoutes";
 
 const App = () => {
   return (
@@ -34,20 +37,28 @@ const App = () => {
         }}
       />
       <AuthProvider>
-        <ContentProvider>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignUpPage />} />
-            <Route element={<ProtectedRoutes />}>
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route
-                path="/author-dashboard"
-                element={<AuthorDashboardPage />}
-              />
-            </Route>
-          </Routes>
-        </ContentProvider>
+        <NovelProvider>
+          <ContentProvider>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<SignUpPage />} />
+              <Route element={<ProtectedRoutes />}>
+                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route element={<AuthorRoutes />}>
+                  <Route
+                    path="/author-dashboard"
+                    element={<AuthorDashboardPage />}
+                  />
+                  <Route
+                    path="/author-dashboard/:id"
+                    element={<GetSinglePage />}
+                  />
+                </Route>
+              </Route>
+            </Routes>
+          </ContentProvider>
+        </NovelProvider>
       </AuthProvider>
     </BrowserRouter>
   );

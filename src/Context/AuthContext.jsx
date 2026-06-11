@@ -13,6 +13,7 @@ const AuthProvider = ({ children }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [activeTab, setActiveTab] = useState("novels");
   const handlePassword = () => {
     setShowPassword((prev) => !prev);
   };
@@ -90,14 +91,14 @@ const AuthProvider = ({ children }) => {
       });
       const result = await res.json();
       setUserData(result.data);
-      console.log(userData);
+      // console.log(userData);
 
       if (res.ok) {
         return true;
       }
     } catch (error) {
       console.log("Error verifying token:", error);
-      return false;
+      return "network_error";
     }
   };
 
@@ -108,11 +109,13 @@ const AuthProvider = ({ children }) => {
     handlePassword,
     isAuthenticated,
     logout,
+    setActiveTab,
     signingUp,
     signingIn,
     showPassword,
     showConfirmPassword,
     userData,
+    activeTab,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

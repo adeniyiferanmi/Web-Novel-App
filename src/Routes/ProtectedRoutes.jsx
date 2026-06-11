@@ -23,7 +23,7 @@ const ProtectedRoutes = () => {
       }
     };
     getToken();
-  }, [navigate, isAuthenticated]);
+  }, []);
   if (checking) {
     return (
       <div className="flex items-center justify-center h-screen bg-[#EEE9E1]">
@@ -34,11 +34,5 @@ const ProtectedRoutes = () => {
 
   return <Outlet />;
 };
-//   return (
-//     <div>
-//       <Outlet />
-//     </div>
-//   );
-// };
 
 export default ProtectedRoutes;

@@ -9,7 +9,6 @@ const Header = ({ logoLink }) => {
     logout();
     navigate("/login"); // navigate in the component
   };
-  const isAuthor = userData.Profile === "Author";
   return (
     <div>
       <header className="fixed w-[100%] bg-white pb-[20px] z-[1000]">
@@ -47,18 +46,28 @@ const Header = ({ logoLink }) => {
                   <p className="text-[0.9rem] text-[#808080] border-b-1 border-b-[#808080bb]">
                     {userData.Profile}
                   </p>
+                  {userData.Profile === "Author" ? (
+                    <a
+                      href="/author-dashboard"
+                      className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-150 group/item"
+                    >
+                      <span className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center group-hover/item:bg-green-200 transition-colors">
+                        <i className="bi bi-person-plus text-green-600 text-[16px]"></i>
+                      </span>
+                      <span className="font-medium">Dashboard</span>
+                    </a>
+                  ) : (
+                    ""
+                  )}
                   <a
-                    href={isAuthor ? "/author-dashboard" : ""}
+                    href=""
                     className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-150 group/item"
                   >
                     <span className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center group-hover/item:bg-green-200 transition-colors">
                       <i className="bi bi-person-plus text-green-600 text-[16px]"></i>
                     </span>
-                    <span className="font-medium">
-                      {isAuthor ? "Dashboard" : "Library"}
-                    </span>
+                    <span className="font-medium">library</span>
                   </a>
-
                   <a
                     href=""
                     onClick={handleLogout}
