@@ -12,6 +12,7 @@ import AuthorDashboardPage from "./components/AuthorDashboardPage";
 import NovelProvider from "./Context/NovelContext";
 import GetSinglePage from "./components/GetSinglePage";
 import AuthorRoutes from "./Routes/AuthorRoutes";
+import SelectProfile from "./components/SelectProfile";
 
 const App = () => {
   return (
@@ -43,6 +44,7 @@ const App = () => {
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignUpPage />} />
+              <Route path="/select-profile" element={<SelectProfile />} />
               <Route element={<ProtectedRoutes />}>
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route element={<AuthorRoutes />}>

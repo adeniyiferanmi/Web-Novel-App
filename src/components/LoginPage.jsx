@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 const LoginPage = () => {
-  const { handlePassword, showPassword, login, signingIn } =
+  const { handlePassword, showPassword, login, signingIn, googleLogin } =
     useContext(AuthContext);
 
   const userSchema = yup.object({
@@ -36,6 +36,9 @@ const LoginPage = () => {
 
   const onSubmit = (data) => {
     login(data);
+  };
+  const handleGoogleLogin = () => {
+    googleLogin();
   };
   return (
     <div className="flex">
@@ -110,6 +113,11 @@ const LoginPage = () => {
               className="bg-white block border-1 border-[#80808060] p-[13px] rounded-xl w-[100%]"
               {...register("email")}
             />
+            {errors.Profile && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.email.message}
+              </p>
+            )}
             <div className="relative w-[100%]">
               <input
                 type={showPassword ? "text" : "password"}
@@ -117,6 +125,11 @@ const LoginPage = () => {
                 className="bg-white block border-1 border-[#80808060] p-[13px] rounded-xl w-[100%] mt-[20px]"
                 {...register("password")}
               />
+              {errors.Profile && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.password.message}
+                </p>
+              )}
 
               <span
                 onClick={handlePassword}
@@ -142,13 +155,12 @@ const LoginPage = () => {
             <span className="block border-b-1 w-[185px] mb-[4px] ml-[10px]"></span>
           </div>
           <div className="flex justify-center bg-white border-1 rounded-2xl border-[#8080806b] p-[12px] mt-[30px]">
-            <img src={image4} alt="" className="w-[20px] mr-[10px]" />
-            <span className="font-bold">Continue with Google</span>
+            <button type="submit" onClick={handleGoogleLogin} className="flex">
+              <img src={image4} alt="" className="w-[20px] mr-[10px]" />
+              <span className="font-bold">Continue with Google</span>
+            </button>
           </div>
-          <div className="flex justify-center bg-black text-white border-1 rounded-2xl border-[#8080806b] p-[12px] mt-[20px]">
-            <img src={image5} alt="" className="w-[20px] mr-[10px]" />
-            <span className="font-bold">Continue with Apple</span>
-          </div>
+
           <div className="justify-center mt-[20px] flex ">
             <p className="text-[#00000080] font-serif"> New to Bokifa? </p>
             <a

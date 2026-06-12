@@ -5,7 +5,7 @@ import { Outlet, Navigate } from "react-router-dom";
 const AuthorRoutes = () => {
   const { userData } = useContext(AuthContext);
 
-  if (userData?.Profile?.trim() !== "I'm an Author") {
+  if (userData?.Profile?.trim() !== "Author") {
     return <Navigate to="/dashboard" replace />;
   }
 

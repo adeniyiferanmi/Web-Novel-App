@@ -17,6 +17,7 @@ const SignUpPage = () => {
     handlePassword,
     showConfirmPassword,
     handleConfirmPassword,
+    googleLogin,
   } = useContext(AuthContext);
 
   const profiles = [
@@ -53,11 +54,11 @@ const SignUpPage = () => {
       .string()
       .oneOf(["Author", "Reader"], "Invalid profile")
       .required("Profile is required"),
+    agreedToTerms: yup
+      .boolean()
+      .oneOf([true], "You must accept the terms")
+      .required(),
   });
-  agreedToTerms: yup
-    .boolean()
-    .oneOf([true], "You must accept the terms")
-    .required();
 
   const {
     register,
@@ -87,6 +88,9 @@ const SignUpPage = () => {
   const onSubmit = (data) => {
     signup(data);
   };
+  const handleGoogleLogin = () => {
+    googleLogin();
+  };
   return (
     <div className="bg-linear-to-r from-[#40223E] to-[#2E2939] py-[30px]">
       <div className="w-[600px] m-auto bg-[#EEE9E1] p-[50px] rounded-2xl ">
@@ -97,7 +101,7 @@ const SignUpPage = () => {
           <h1 className="font-serif text-[1.8rem] font-[600] mt-[40px]">
             Create Your Account
           </h1>
-          <p className="text-[1.rem] text-[#00000079] font-[600]">
+          <p className="text-[1.rem] text-[#00000079] font-[600] mb-[20px]">
             Join 2.4 million readers and authors
           </p>
         </div>
@@ -231,6 +235,17 @@ const SignUpPage = () => {
               {/* Start My Jouney <i class="bi bi-arrow-right "></i> */}
             </button>
           </div>
+          <div className="flex text-center mt-[20px] text-[#8080807e]">
+            <span className="block border-b-1 w-[185px] mr-[10px] mb-[4px]"></span>{" "}
+            ___or ___{" "}
+            <span className="block border-b-1 w-[185px] mb-[4px] ml-[10px]"></span>
+          </div>
+          <div className="flex justify-center bg-white border-1 rounded-2xl border-[#8080806b] p-[12px] mt-[30px]">
+            <button type="submit" onClick={handleGoogleLogin} className="flex">
+              <img src={image4} alt="" className="w-[20px] mr-[10px]" />
+              <span className="font-bold">Continue with Google</span>
+            </button>
+          </div>
           <div className="justify-center mt-[20px] flex ">
             <p className="text-[#00000080] font-serif">
               {" "}
@@ -245,19 +260,6 @@ const SignUpPage = () => {
             </a>
           </div>
         </form>
-        <div className="flex text-center mt-[20px] text-[#8080807e]">
-          <span className="block border-b-1 w-[185px] mr-[10px] mb-[4px]"></span>{" "}
-          ___or ___{" "}
-          <span className="block border-b-1 w-[185px] mb-[4px] ml-[10px]"></span>
-        </div>
-        <div className="flex justify-center bg-white border-1 rounded-2xl border-[#8080806b] p-[12px] mt-[30px]">
-          <img src={image4} alt="" className="w-[20px] mr-[10px]" />
-          <span className="font-bold">Continue with Google</span>
-        </div>
-        <div className="flex justify-center bg-black text-white border-1 rounded-2xl border-[#8080806b] p-[12px] mt-[20px]">
-          <img src={image5} alt="" className="w-[20px] mr-[10px]" />
-          <span className="font-bold">Continue with Apple</span>
-        </div>
       </div>
     </div>
   );
