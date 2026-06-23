@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 import { useGoogleLogin } from "@react-oauth/google";
-import { ContentContext } from "./ContentContext";
 
 export const AuthContext = createContext();
 const BaseUrl = import.meta.env.VITE_API_URL;
@@ -18,6 +17,10 @@ const AuthProvider = ({ children }) => {
   const [activeTab, setActiveTab] = useState("novels");
   const [pick, setPick] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [authorsData, setAuthorsData] = useState([]);
+  const [gettingAuthors, setGetAuthors] = useState(false);
+  const [singleAuthor, setSingleAuthor] = useState(null);
+  const [gettingSingleAuthor, setGettingSingleAuthor] = useState(false);
 
   const handlePassword = () => {
     setShowPassword((prev) => !prev);
@@ -26,8 +29,9 @@ const AuthProvider = ({ children }) => {
     setShowConfirmPassword((prev) => !prev);
   };
 
-  const signup = async (data) => {
+  const signup = async (data, setError) => {
     setSigningUp(true);
+
     try {
       const response = await fetch(`${BaseUrl}/auth/signup`, {
         method: "POST",
@@ -44,6 +48,40 @@ const AuthProvider = ({ children }) => {
       } else {
         toast.error("Signup failed. Please try again.");
       }
+      if (!response.ok) {
+        if (res.message.includes("Email already in use")) {
+          setError("email", {
+            type: "manual",
+            message: "This email is already registered",
+          });
+        } else if (res.message.includes("Profile")) {
+          setError("Profile", {
+            type: "manual",
+            message: res.message,
+          });
+        } else if (res.message.includes("password")) {
+          setError("Profile", {
+            type: "manual",
+            message: res.message,
+          });
+        } else if (res.message.includes("confirmPassword")) {
+          setError("Profile", {
+            type: "manual",
+            message: response.message,
+          });
+        } else if (res.message.includes("fullName")) {
+          setError("Profile", {
+            type: "manual",
+            message: res.message,
+          });
+        } else {
+          setError("root", {
+            type: "manual",
+            message: res.message || "Something went wrong",
+          });
+          return;
+        }
+      }
     } catch (error) {
       console.error("An error occurred during signup:", error);
     } finally {
@@ -51,7 +89,7 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = async (data) => {
+  const login = async (data, setError) => {
     setSigningIn(true);
     try {
       const response = await fetch(`${BaseUrl}/auth/signin`, {
@@ -70,6 +108,24 @@ const AuthProvider = ({ children }) => {
         navigate("/dashboard");
       } else {
         toast.error("Login failed. Please try again.");
+      }
+      if (!response.ok) {
+        if (result.message.includes("Invalid email or password")) {
+          setError("email", {
+            type: "manual",
+            message: "This email or password incorrect",
+          });
+        } else if (result.message.includes("Invalid email or password")) {
+          setError("password", {
+            type: "manual",
+            message: "This email or password incorrect",
+          });
+        } else {
+          setError("root", {
+            type: "manual",
+            message: result.message || "Something went wrong",
+          });
+        }
       }
     } catch (error) {
       toast.error("An error occurred during login. Please try again.");
@@ -99,7 +155,6 @@ const AuthProvider = ({ children }) => {
       });
       const result = await res.json();
       setUserData(result.data);
-      // console.log(userData);
 
       if (res.ok) {
         return true;
@@ -164,7 +219,52 @@ const AuthProvider = ({ children }) => {
       setLoading(false);
     }
   };
+  const getAllAuthors = async () => {
+    try {
+      setGetAuthors(true);
+      const res = await fetch(`${BaseUrl}/auth/authors`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
+      const response = await res.json();
+
+      if (res.ok) {
+        setAuthorsData(response.data);
+        console.log(authorsData);
+      } else {
+        toast.error("Unable to retrieve authors");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setGetAuthors(false);
+    }
+  };
+  const getSingleAuthor = async (authorId) => {
+    const token = Cookies.get("token");
+    setGettingSingleAuthor(true);
+    try {
+      const res = await fetch(`${BaseUrl}/auth/author/${authorId}`, {
+        method: "GET",
+        headers: {
+          Authorisation: `Bearer ${token}`,
+        },
+      });
+      const response = await res.json();
+      console.log(response);
+
+      if (res.ok) {
+        setSingleAuthor(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setGettingSingleAuthor(false);
+    }
+  };
   const value = {
     signup,
     login,
@@ -176,6 +276,8 @@ const AuthProvider = ({ children }) => {
     googleLogin,
     handleUpdateProfile,
     setPick,
+    getAllAuthors,
+    getSingleAuthor,
     signingUp,
     signingIn,
     showPassword,
@@ -183,6 +285,10 @@ const AuthProvider = ({ children }) => {
     userData,
     activeTab,
     pick,
+    authorsData,
+    gettingAuthors,
+    singleAuthor,
+    gettingSingleAuthor,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

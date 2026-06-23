@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 
 // export const ContentContext = createContext();
-export const ContentContext = createContext();
+const ContentContext = createContext();
 const ContentProvider = ({ children }) => {
   const [pick, setPick] = useState(null);
 

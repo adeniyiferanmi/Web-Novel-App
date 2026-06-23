@@ -13,6 +13,14 @@ const NovelProvider = ({ children }) => {
   const [updatingNovel, setUpdatingNovel] = useState(false);
   const [getNovel, setGetNovel] = useState(false);
   const [singleData, setSingleData] = useState(null);
+  const [allNovels, setAllNovels] = useState(null);
+  const [gettingReadersNovel, SetGettingReadersNovel] = useState(false);
+  const [readersNovelData, setReadersNovelData] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
+  const [searching, setSearching] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [gettingGenre, setGettingGenre] = useState(false);
+  const [getGenreData, setGetGenreData] = useState(null);
   const { id } = useParams();
 
   const addNovel = async (data) => {
@@ -66,7 +74,7 @@ const NovelProvider = ({ children }) => {
       if (res.ok) {
         setNovelData(response.data);
       }
-      console.log(response.data);
+      console.log(response);
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -120,13 +128,17 @@ const NovelProvider = ({ children }) => {
       });
       const response = await res.json();
       if (res.ok) {
+        const updatedNovel = response.data;
+        setSingleData(updatedNovel);
         setNovelData((prev) =>
           Array.isArray(prev)
-            ? prev.map((novel) => (novel._id === id ? response.data : novel))
-            : [response.data],
+            ? prev.map((novel) =>
+                novel._id === updatedNovel._id ? updatedNovel : novel,
+              )
+            : [updatedNovel],
         );
-        onSuccess();
         toast.success("Novel Updated Successfully");
+        onSuccess?.();
       } else {
         toast.error(response.message || "Unable to update");
       }
@@ -161,12 +173,114 @@ const NovelProvider = ({ children }) => {
       setGetNovel(false);
     }
   };
+  const getAllNovel = async () => {
+    try {
+      const res = await fetch(`${BaseUrl}/novel/get-novel`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const response = await res.json();
+      console.log(response.data);
+
+      if (res.ok) {
+        setAllNovels(response.data);
+        console.log(allNovels);
+      } else {
+        toast.error("Unable to get novels");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
+  };
+  const getReadersNovelToRead = async (novelId) => {
+    const token = Cookies.get("token");
+    try {
+      SetGettingReadersNovel(true);
+      const res = await fetch(`${BaseUrl}/novel/read/${novelId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const response = await res.json();
+      console.log(response);
+
+      if (res.ok) {
+        setReadersNovelData(response.data);
+      } else {
+        toast.error("unable to get novel");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Somethin went wrong");
+    } finally {
+      SetGettingReadersNovel(false);
+    }
+  };
+  const searchNovels = async (query) => {
+    const token = Cookies.get("token");
+    try {
+      setSearching(true);
+      const res = await fetch(
+        `${BaseUrl}/novel/search?query=${encodeURIComponent(query)}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      const response = await res.json();
+      if (res.ok) {
+        setSearchResults(response.data);
+      } else {
+        toast.error("Novel not found");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    } finally {
+      setSearching(false);
+    }
+  };
+  const getGenres = async (genres) => {
+    const token = Cookies.get("token");
+    try {
+      setGettingGenre(true);
+      const res = await fetch(`${BaseUrl}/novel/get-genre/${genres}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const response = await res.json();
+      if (res.ok) {
+        setGetGenreData(response.data);
+      } else {
+        toast.error(response.message || "Unable to get novels");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    } finally {
+      setGettingGenre(false);
+    }
+  };
   const value = {
     addNovel,
     getAuthorNovels,
     deleteNovel,
     updateNovel,
     getSingleNovel,
+    getAllNovel,
+    getReadersNovelToRead,
+    searchNovels,
+    setSearchTerm,
+    getGenres,
     datas,
     addingNovel,
     getAuthorNovel,
@@ -174,6 +288,14 @@ const NovelProvider = ({ children }) => {
     updatingNovel,
     getNovel,
     singleData,
+    allNovels,
+    readersNovelData,
+    gettingReadersNovel,
+    searchResults,
+    searching,
+    searchTerm,
+    gettingGenre,
+    getGenreData,
   };
   return (
     <NovelContext.Provider value={value}>{children}</NovelContext.Provider>

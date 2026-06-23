@@ -1,13 +1,23 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import logo from "../assets/logo.webp";
 import { AuthContext } from "../Context/AuthContext";
+import { NovelContext } from "../Context/NovelContext";
+import { useNavigate } from "react-router-dom";
 
 const Header = ({ logoLink }) => {
   const { userData, logout } = useContext(AuthContext);
+  const { searchNovels, searchResults, searchTerm, setSearchTerm, searching } =
+    useContext(NovelContext);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-    navigate("/login"); // navigate in the component
+    navigate("/login");
+  };
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (!searchTerm.trim()) return;
+    navigate(`/search?query=${encodeURIComponent(searchTerm)}`);
   };
   return (
     <div>
@@ -20,17 +30,21 @@ const Header = ({ logoLink }) => {
               </a>
             </div>
             <div className="relative flex items-center  w-[800px] pl-[15px] h-[55px] bg-[rgb(246,246,246)] rounded-[800px]">
-              <input
-                type="text"
-                className="outline-none"
-                placeholder="Search for books..."
-              />
-              <div className="absolute top-[0] right-0 ">
-                <button className="bg-[rgb(2,122,54)] text-white p-[10px] w-[150px] rounded-[150px] h-[55px]">
-                  {" "}
-                  <i class="bi bi-search mr-[10px]"></i> search
-                </button>
-              </div>
+              <form onSubmit={handleSearch}>
+                <input
+                  type="text"
+                  className="outline-none w-[800px] h-[55px]"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search for books..."
+                />
+                <div className="absolute top-[0] right-0 ">
+                  <button className="bg-[rgb(2,122,54)] text-white p-[10px] w-[150px] rounded-[150px] h-[55px]">
+                    {" "}
+                    <i class="bi bi-search mr-[10px]"></i> search
+                  </button>
+                </div>
+              </form>
             </div>
             {userData ? (
               <div className="relative drop mt-[10px]">
@@ -60,7 +74,7 @@ const Header = ({ logoLink }) => {
                     ""
                   )}
                   <a
-                    href=""
+                    href="/library"
                     className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors duration-150 group/item"
                   >
                     <span className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center group-hover/item:bg-green-200 transition-colors">
@@ -113,24 +127,24 @@ const Header = ({ logoLink }) => {
         <div className="w-[95%] m-auto flex justify-between pt-[20px]">
           <nav className="">
             <ul className="flex gap-[30px]">
-              <a href="#">
+              <a href="/dashboard">
                 <li className="text-[1rem] font-bold">
                   Home <i class="bi bi-caret-down-fill relative"></i>
                 </li>
               </a>
-              <a href="#">
+              <a href="/novels">
                 <li className="text-[1rem] font-bold">
                   Explore <i class="bi bi-caret-down-fill relative "></i>
                 </li>
               </a>
-              <a href="#">
+              <a href="/genre">
                 <li className="text-[1rem] font-bold">
                   Genres <i class="bi bi-caret-down-fill relative"></i>
                 </li>
               </a>
-              <a href="#">
+              <a href="/author">
                 <li className="text-[1rem] font-bold">
-                  Blogs <i class="bi bi-caret-down-fill relative"></i>
+                  Authors <i class="bi bi-caret-down-fill relative"></i>
                 </li>
               </a>
               <a href="#">

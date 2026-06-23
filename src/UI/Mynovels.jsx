@@ -126,7 +126,7 @@ const Mynovels = () => {
                 </p>
               </div>
               <p className="text-[1rem] text-gray-700 font-[500]">
-                {novel.chapter?.length || 0}
+                {novel.chapters?.length}
               </p>
               <p className="text-[0.85rem] text-gray-400">
                 {formatDistanceToNow(new Date(novel.updatedAt), {
@@ -134,9 +134,11 @@ const Mynovels = () => {
                 })}
               </p>
               <div className="flex items-center gap-[15px]">
-                <button className="text-gray-400 hover:text-gray-700 transition-colors">
-                  <i className="bi bi-eye text-[18px]"></i>
-                </button>
+                <a href={`/author-dashboard/${novel._id}`}>
+                  <button className="text-gray-400 hover:text-gray-700 transition-colors">
+                    <i className="bi bi-eye text-[18px]"></i>
+                  </button>
+                </a>
                 <button
                   className="text-gray-400 hover:text-[#027A36] transition-colors"
                   onClick={() => openUpdateModal(novel)}

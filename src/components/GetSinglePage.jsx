@@ -4,19 +4,33 @@ import { NovelContext } from "../Context/NovelContext";
 import { useParams } from "react-router-dom";
 import UpdateModal from "../UI/UpdateModal";
 import { formatDistanceToNow } from "date-fns";
+import AddChapters from "../UI/AddChapters";
+import { ChapterContext } from "../Context/ChapterContext";
 
 const GetSinglePage = () => {
   const { getSingleNovel, getNovel, singleData, deleteNovel } =
     useContext(NovelContext);
+  const { allChapter, allChapterData, getAllChapter } =
+    useContext(ChapterContext);
+
   const { id } = useParams();
   const [selectedNovel, setSelectedNovel] = useState(null);
+  const [selectedNovelForChapter, setSelectedNovelForChapter] = useState(null);
+  const [isopen, setIsOpen] = useState(false);
 
   const openUpdateModal = (singleData) => {
+    console.log(singleData);
     setSelectedNovel(singleData);
   };
 
   const closeUpdateModal = () => {
     setSelectedNovel(null);
+  };
+  const handleOpenModel = () => {
+    setIsOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsOpen(false);
   };
 
   const handleDeleteNovel = (id) => {
@@ -31,13 +45,20 @@ const GetSinglePage = () => {
   }, [id]);
   console.log(singleData);
 
+  useEffect(() => {
+    if (singleData?._id) {
+      getAllChapter(singleData._id); // then fetch chapters
+    }
+  }, [singleData]);
+  console.log(allChapterData);
+
   return (
     <div>
-      <Header />
-      <section className="min-h-screen bg-[#0F0F0F] text-white px-6 py-10 pt-[200px]">
+      <Header logoLink="/dashboard" />
+      <section className="min-h-screen bg-[#0F0F0F]  px-6 py-10 pt-[200px]">
         <div className="max-w-7xl mx-auto">
           <a href="/author-dashboard">
-            <button className="flex items-center gap-2 px-5 py-2 border border-white/10 rounded-xl hover:bg-white/5 transition">
+            <button className="flex text-white items-center gap-2 px-5 py-2 border border-white/10 rounded-xl hover:bg-white/5 transition">
               <i className="bi bi-arrow-left"></i>
               My Novels
             </button>
@@ -52,7 +73,7 @@ const GetSinglePage = () => {
               />
             </div>
 
-            <div className="flex-1">
+            <div className="flex-1 text-white">
               <h1 className="text-5xl font-bold mb-3">
                 {singleData?.novelTitle}
               </h1>
@@ -87,7 +108,7 @@ const GetSinglePage = () => {
                   </p>
 
                   <h3 className="text-3xl font-bold mt-2">
-                    {singleData?.chapter?.length || 0}
+                    {singleData?.chapters?.length || 0}
                   </h3>
                 </div>
 
@@ -117,10 +138,21 @@ const GetSinglePage = () => {
               </div>
 
               <div className="flex flex-wrap gap-4 mt-8">
-                <button className="bg-[#027A36] hover:bg-[#02632c] px-6 py-3 rounded-xl font-medium transition">
+                <button
+                  onClick={() => {
+                    setSelectedNovelForChapter(singleData);
+                    setIsOpen(true);
+                  }}
+                  className="bg-[#027A36] hover:bg-[#02632c] px-6 py-3 rounded-xl font-medium transition"
+                >
                   <i className="bi bi-plus-lg mr-2"></i>
                   Add Chapter
                 </button>
+                <AddChapters
+                  isOpen={isopen}
+                  onClose={handleCloseModal}
+                  novelId={selectedNovelForChapter?._id}
+                />
 
                 <button
                   onClick={() => openUpdateModal(singleData)}
@@ -133,6 +165,7 @@ const GetSinglePage = () => {
                   isOpen={!!selectedNovel}
                   novel={selectedNovel}
                   onClose={closeUpdateModal}
+                  onSuccess={() => getSingleNovel(singleData._id)}
                 />
 
                 <button
@@ -146,7 +179,7 @@ const GetSinglePage = () => {
             </div>
           </div>
 
-          <div className="mt-12 bg-[#1A1A1A] rounded-3xl p-8 border border-white/5">
+          <div className="mt-12 text-white bg-[#1A1A1A] rounded-3xl p-8 border border-white/5">
             <h2 className="text-2xl font-semibold mb-6">Synopsis</h2>
 
             <p className="text-gray-300 leading-9 text-lg">
@@ -155,33 +188,36 @@ const GetSinglePage = () => {
           </div>
 
           <div className="mt-10">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex text-white items-center justify-between mb-6">
               <h2 className="text-2xl font-semibold">Chapters</h2>
-
-              <button className="text-[#027A36] hover:text-[#03a548] transition">
-                View All
-              </button>
+              <a href={`/chapter/${singleData?._id}`}>
+                <button className="text-[#027A36] hover:text-[#03a548] transition">
+                  View All
+                </button>
+              </a>
             </div>
-            {singleData?.chapters?.length > 0 ? (
-              singleData.chapters.map((chapter, index) => (
-                <div
-                  key={chapter._id}
-                  className="bg-[#1A1A1A] border border-white/5 rounded-2xl p-5 hover:border-[#027A36]/40 transition"
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-gray-400 text-sm">
-                        Chapter {index + 1}
-                      </p>
+            {allChapterData?.length > 0 ? (
+              allChapterData.slice(0, 4).map((chapter, index) => (
+                <a href={`/single-chapter/${chapter._id}`}>
+                  <div
+                    key={chapter._id}
+                    className="bg-[#1A1A1A] text-white border  mt-[20px] border-white/5 rounded-2xl p-5 hover:border-[#027A36]/40 transition"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="">
+                        <p className="text-gray-400 text-sm">
+                          Chapter {chapter.chapterNumber}
+                        </p>
 
-                      <h3 className="text-lg font-medium mt-1">
-                        {chapter.title}
-                      </h3>
+                        <h3 className="text-lg font-medium mt-1">
+                          {chapter.chapterTitle}
+                        </h3>
+                      </div>
+
+                      <i className="bi bi-chevron-right text-gray-400"></i>
                     </div>
-
-                    <i className="bi bi-chevron-right text-gray-400"></i>
                   </div>
-                </div>
+                </a>
               ))
             ) : (
               <div className="bg-[#1A1A1A] rounded-2xl p-10 text-center text-gray-400">

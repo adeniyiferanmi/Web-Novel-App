@@ -1,44 +1,32 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ChapterContext } from "../Context/ChapterContext";
+import { NovelContext } from "../Context/NovelContext";
 import { useNavigate, useParams } from "react-router-dom";
-import UpdateChapter from "../UI/UpdateChapter";
 
-const GetSingleChapters = () => {
-  const { chapterId } = useParams();
+const ReadChapter = () => {
   const {
     getSingleChapter,
     singleChapter,
     singleData,
-    allChapterData,
     getAllChapter,
-    deleteChapter,
+    allChapterData,
   } = useContext(ChapterContext);
+  const { getReadersNovelToRead, readersNovelData } = useContext(NovelContext);
+  const { chapterId, novelId } = useParams();
   const [showSidebar, setShowSidebar] = useState(false);
-  const [selectedChapter, setSelectedChapter] = useState(null);
-  const handleOpenModal = (chapter) => {
-    setSelectedChapter(chapter);
-  };
-  const handleCloseModal = () => {
-    setSelectedChapter(null);
-  };
   const navigate = useNavigate();
+
   useEffect(() => {
-    if (chapterId) {
-      getSingleChapter(chapterId);
+    getSingleChapter(chapterId);
+    if (!readersNovelData || readersNovelData._id !== novelId) {
+      getReadersNovelToRead(novelId);
     }
-  }, [chapterId]);
+  }, [chapterId, novelId]);
   useEffect(() => {
     if (singleData?.novel) {
       getAllChapter(singleData.novel);
     }
-  }, [singleData]);
-  console.log(allChapterData);
-
-  const handleDeleteChapter = (chapterId) => {
-    if (window.confirm("Are you sure you want to delete this chapter?")) {
-      deleteChapter(chapterId);
-    }
-  };
+  }, [singleData?.novel]);
   const currentIndex = allChapterData?.findIndex((ch) => ch._id === chapterId);
   const prevChapter =
     currentIndex > 0 ? allChapterData[currentIndex - 1] : null;
@@ -67,7 +55,7 @@ const GetSingleChapters = () => {
             <div
               key={ch._id}
               onClick={() => {
-                navigate(`/single-chapter/${ch._id}`);
+                navigate(`/read/${novelId}/chapter/${ch._id}`);
                 setShowSidebar(false);
               }}
               className="px-[20px] py-[14px] border-b border-gray-50 cursor-pointer hover:bg-gray-50 transition-colors"
@@ -150,7 +138,9 @@ const GetSingleChapters = () => {
         <div className="flex justify-between items-center mt-[50px] pt-[25px] border-t border-gray-100">
           {prevChapter ? (
             <button
-              onClick={() => navigate(`/single-chapter/${prevChapter._id}`)}
+              onClick={() =>
+                navigate(`/read/${novelId}/chapter/${prevChapter._id}`)
+              }
               className="flex items-center gap-2 px-5 py-3 border border-gray-200 rounded-full text-[13px] hover:bg-gray-50 transition-colors"
             >
               <i className="bi bi-arrow-left"></i>
@@ -166,7 +156,9 @@ const GetSingleChapters = () => {
           )}
           {nextChapter ? (
             <button
-              onClick={() => navigate(`/single-chapter/${nextChapter._id}`)}
+              onClick={() =>
+                navigate(`/read/${novelId}/chapter/${nextChapter._id}`)
+              }
               className="flex items-center gap-2 px-5 py-3 bg-[#027A36] text-white rounded-full text-[13px] hover:bg-[#153026] transition-colors"
             >
               <div className="text-right">
@@ -181,30 +173,9 @@ const GetSingleChapters = () => {
             <div></div>
           )}
         </div>
-
-        <div className="flex gap-[10px] justify-between mt-[40px] pt-[20px] border-t border-gray-100">
-          <button
-            onClick={() => handleDeleteChapter(singleData._id)}
-            className="border border-red-500/30 text-red-400 hover:bg-red-500/10 px-6 py-3 rounded-xl transition"
-          >
-            <i className="bi bi-trash mr-2"></i>
-            Delete
-          </button>
-          <button
-            onClick={() => handleOpenModal(singleData)}
-            className="px-6 py-2 border border-[#027A36] text-[#027A36] rounded-full text-[13px] font-medium hover:bg-[#e8f2ec] transition-colors"
-          >
-            <i className="bi bi-pencil mr-2"></i>Edit Chapter
-          </button>
-          <UpdateChapter
-            isOpen={!!selectedChapter}
-            chapter={selectedChapter}
-            onClose={handleCloseModal}
-          />
-        </div>
       </div>
     </div>
   );
 };
 
-export default GetSingleChapters;
+export default ReadChapter;

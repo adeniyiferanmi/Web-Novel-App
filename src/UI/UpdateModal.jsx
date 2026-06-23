@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { NovelContext } from "../Context/NovelContext";
 
-const UpdateModal = ({ isOpen, novel, singleData, onClose }) => {
+const UpdateModal = ({ isOpen, novel, singleData, onClose, onSuccess }) => {
   console.log(novel);
   const [coverPreview, setCoverPreview] = useState(null);
 
@@ -58,6 +58,7 @@ const UpdateModal = ({ isOpen, novel, singleData, onClose }) => {
   const watchedStatus = watch("status");
 
   useEffect(() => {
+    console.log("Novel received:", novel);
     if (novel) {
       reset({
         novelTitle: novel?.novelTitle,
@@ -68,7 +69,7 @@ const UpdateModal = ({ isOpen, novel, singleData, onClose }) => {
       });
       setCoverPreview(novel.coverImage);
     }
-  }, [novel]);
+  }, [novel, reset]);
 
   if (!isOpen) return null;
 
@@ -82,14 +83,16 @@ const UpdateModal = ({ isOpen, novel, singleData, onClose }) => {
   const id = novel?._id;
   const handleUpdateNovels = (data) => {
     updateNovel(id, data, () => {
+      onSuccess?.();
       onClose();
     });
   };
+  console.log(watch());
 
   return (
     <div className="fixed inset-0 bg-[#0000003d] flex items-center justify-center z-[2000] px-4">
       <div className="bg-white rounded-2xl w-full max-w-[820px] p-[30px] overflow-hidden max-h-[90vh] overflow-y-auto">
-        <div>
+        <div className="text-[black]">
           <div>
             <h1 className="text-[2rem] font-bold">Update Novel</h1>
           </div>

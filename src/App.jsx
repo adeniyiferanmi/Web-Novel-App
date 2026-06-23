@@ -13,6 +13,19 @@ import NovelProvider from "./Context/NovelContext";
 import GetSinglePage from "./components/GetSinglePage";
 import AuthorRoutes from "./Routes/AuthorRoutes";
 import SelectProfile from "./components/SelectProfile";
+import ChapterProvider from "./Context/ChapterContext";
+import ChaptersPage from "./components/ChaptersPage";
+import GetSingleChapters from "./components/GetSingleChapters";
+import ReadNovel from "./components/ReadNovel";
+import ReadChapter from "./components/ReadChapter";
+import ReadersLibrary from "./components/ReadersLibrary";
+import LibraryProvider from "./Context/LibraryContext";
+import SearchResult from "./components/SearchResult";
+import MyNovelsPage from "./components/MyNovelsPage";
+import Authors from "./components/Authors";
+import SingleAuthorPage from "./components/SingleAuthorPage";
+import Genres from "./components/Genres";
+import GenreNovels from "./components/GenreNovels";
 
 const App = () => {
   return (
@@ -39,27 +52,57 @@ const App = () => {
       />
       <AuthProvider>
         <NovelProvider>
-          <ContentProvider>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignUpPage />} />
-              <Route path="/select-profile" element={<SelectProfile />} />
-              <Route element={<ProtectedRoutes />}>
-                <Route path="/dashboard" element={<DashboardPage />} />
-                <Route element={<AuthorRoutes />}>
-                  <Route
-                    path="/author-dashboard"
-                    element={<AuthorDashboardPage />}
-                  />
-                  <Route
-                    path="/author-dashboard/:id"
-                    element={<GetSinglePage />}
-                  />
-                </Route>
-              </Route>
-            </Routes>
-          </ContentProvider>
+          <ChapterProvider>
+            <LibraryProvider>
+              <ContentProvider>
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/signup" element={<SignUpPage />} />
+                  <Route path="/select-profile" element={<SelectProfile />} />
+
+                  <Route element={<ProtectedRoutes />}>
+                    <Route path="/dashboard" element={<DashboardPage />} />
+                    <Route path="/Read/:novelId" element={<ReadNovel />} />
+                    <Route path="/library" element={<ReadersLibrary />} />
+                    <Route path="/search" element={<SearchResult />} />
+                    <Route
+                      path="/read/:novelId/chapter/:chapterId"
+                      element={<ReadChapter />}
+                    />
+                    <Route path="/library" element={<ReadersLibrary />} />
+                    <Route path="/novels" element={<MyNovelsPage />} />
+                    <Route path="/author" element={<Authors />} />
+                    <Route
+                      path="/author/:authorId"
+                      element={<SingleAuthorPage />}
+                    />
+                    <Route path="/genre" element={<Genres />} />
+                    <Route path="/genre/:genres" element={<GenreNovels />} />
+
+                    <Route element={<AuthorRoutes />}>
+                      <Route
+                        path="/author-dashboard"
+                        element={<AuthorDashboardPage />}
+                      />
+                      <Route
+                        path="/author-dashboard/:id"
+                        element={<GetSinglePage />}
+                      />
+                      <Route
+                        path="/chapter/:novelId"
+                        element={<ChaptersPage />}
+                      />
+                      <Route
+                        path="/single-chapter/:chapterId"
+                        element={<GetSingleChapters />}
+                      />
+                    </Route>
+                  </Route>
+                </Routes>
+              </ContentProvider>
+            </LibraryProvider>
+          </ChapterProvider>
         </NovelProvider>
       </AuthProvider>
     </BrowserRouter>

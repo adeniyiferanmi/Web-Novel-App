@@ -10,7 +10,7 @@ const HeroSection = () => {
         <section className=" w-2100 flex">
           <section className="flex w-1020 slider">
             <section
-              className=" w-[100%] pt-[200px] pb-[100px] section-slide bg-cover transform-[translateY(179px)] z-[-1] bg-center flex"
+              className=" w-[100vw] pt-[200px] pb-[100px] section-slide bg-cover transform-[translateY(179px)] z-[-1] bg-center flex"
               style={{ backgroundImage: `url(${backgroundImage})` }}
             >
               <div className="block w-[95%] m-auto">
@@ -24,13 +24,15 @@ const HeroSection = () => {
                 <span className="block font-sans text-[1.2rem] mt-[20px] text-[#000000ea]">
                   Stay up to date with exciting new books.
                 </span>
-                <button className="bg-[white] hover:bg-[#102327] hover:text-[white] p-[12px] w-[180px] mt-[15px] rounded-[180px] font-[600]">
-                  Discover Now <i class="bi bi-chevron-right"></i>
-                </button>
+                <a href="/novels">
+                  <button className="bg-[white] hover:bg-[#102327] hover:text-[white] p-[12px] w-[180px] mt-[15px] rounded-[180px] font-[600]">
+                    Discover Now <i class="bi bi-chevron-right"></i>
+                  </button>
+                </a>
               </div>
             </section>
             <section
-              className="w-[100%] pt-[30px] pb-[80px] flex section-slide  justify-center items-center bg-cover transform-[translateY(179px)] z-[-1] bg-center flex"
+              className="w-[100vw] pt-[30px] pb-[80px] flex section-slide  justify-center items-center bg-cover transform-[translateY(179px)] z-[-1] bg-center flex"
               style={{
                 backgroundImage: `url(${backgroundImage2})`,
               }}
@@ -45,13 +47,15 @@ const HeroSection = () => {
                 <span className="block font-sans text-[1.2rem] mt-[20px] text-[#000000ea]">
                   Stay up to date with exciting new books.
                 </span>
-                <button className="bg-[white] hover:bg-[#102327] hover:text-[white] p-[12px] w-[180px] mt-[15px] rounded-[180px] font-[600]">
-                  Discover Now <i class="bi bi-chevron-right"></i>
-                </button>
+                <a href="/novels">
+                  <button className="bg-[white] hover:bg-[#102327] hover:text-[white] p-[12px] w-[180px] mt-[15px] rounded-[180px] font-[600]">
+                    Discover Now <i class="bi bi-chevron-right"></i>
+                  </button>
+                </a>
               </div>{" "}
             </section>
             <section
-              className="w-[100%] pt-[200px] pb-[100px] section-slide   relative bg-cover transform-[translateY(179px)] z-[-1] bg-center flex"
+              className="w-[100vw] pt-[200px] pb-[100px] section-slide   relative bg-cover transform-[translateY(179px)] z-[-1] bg-center flex"
               style={{
                 backgroundImage: `url(${backgroundImage3})`,
               }}
@@ -67,15 +71,17 @@ const HeroSection = () => {
                 <span className="block font-sans text-[1.2rem] mt-[20px] text-[#000000ea]">
                   Stay up to date with exciting new books.
                 </span>
-                <button className="bg-[white] hover:bg-[#102327] hover:text-[white] p-[12px] w-[180px] mt-[15px] rounded-[180px] font-[600]">
-                  Discover Now <i class="bi bi-chevron-right"></i>
-                </button>
+                <a href="/novels">
+                  <button className="bg-[white] hover:bg-[#102327] hover:text-[white] p-[12px] w-[180px] mt-[15px] rounded-[180px] font-[600]">
+                    Discover Now <i class="bi bi-chevron-right"></i>
+                  </button>
+                </a>
               </div>
             </section>
           </section>
           <section className="flex w-1020 slider">
             <section
-              className=" w-[100%] pt-[200px] pb-[100px] section-slide bg-cover transform-[translateY(179px)] z-[-1] bg-center flex"
+              className=" w-[100vw] pt-[200px] pb-[100px] section-slide bg-cover transform-[translateY(179px)] z-[-1] bg-center flex"
               style={{ backgroundImage: `url(${backgroundImage})` }}
             >
               <div className="block w-[95%] m-auto">
@@ -89,13 +95,15 @@ const HeroSection = () => {
                 <span className="block font-sans text-[1.2rem] mt-[20px] text-[#000000ea]">
                   Stay up to date with exciting new books.
                 </span>
-                <button className="bg-[white] hover:bg-[#102327] hover:text-[white] p-[12px] w-[180px] mt-[15px] rounded-[180px] font-[600]">
-                  Discover Now <i class="bi bi-chevron-right"></i>
-                </button>
+                <a href="/novels">
+                  <button className="bg-[white] hover:bg-[#102327] hover:text-[white] p-[12px] w-[180px] mt-[15px] rounded-[180px] font-[600]">
+                    Discover Now <i class="bi bi-chevron-right"></i>
+                  </button>
+                </a>
               </div>
             </section>
             <section
-              className="w-[100%] pt-[30px] pb-[80px] flex section-slide  justify-center items-center bg-cover transform-[translateY(160px)] z-[-1] bg-center flex"
+              className="w-[100vw] pt-[30px] pb-[80px] flex section-slide  justify-center items-center bg-cover transform-[translateY(160px)] z-[-1] bg-center flex"
               style={{
                 backgroundImage: `url(${backgroundImage2})`,
               }}
@@ -110,13 +118,15 @@ const HeroSection = () => {
                 <span className="block font-sans text-[1.2rem] mt-[20px] text-[#000000ea]">
                   Stay up to date with exciting new books.
                 </span>
-                <button className="bg-[white] hover:bg-[#102327] hover:text-[white] p-[12px] w-[180px] mt-[15px] rounded-[180px] font-[600]">
-                  Discover Now <i class="bi bi-chevron-right"></i>
-                </button>
+                <a href="/novels">
+                  <button className="bg-[white] hover:bg-[#102327] hover:text-[white] p-[12px] w-[180px] mt-[15px] rounded-[180px] font-[600]">
+                    Discover Now <i class="bi bi-chevron-right"></i>
+                  </button>
+                </a>
               </div>{" "}
             </section>
             <section
-              className="w-[100%] pt-[200px] pb-[100px] section-slide   relative bg-cover transform-[translateY(160px)] z-[-1] bg-center flex"
+              className="w-[100vw] pt-[200px] pb-[100px] section-slide   relative bg-cover transform-[translateY(160px)] z-[-1] bg-center flex"
               style={{
                 backgroundImage: `url(${backgroundImage3})`,
               }}
@@ -132,9 +142,11 @@ const HeroSection = () => {
                 <span className="block font-sans text-[1.2rem] mt-[20px] text-[#000000ea]">
                   Stay up to date with exciting new books.
                 </span>
-                <button className="bg-[white] hover:bg-[#102327] hover:text-[white] p-[12px] w-[180px] mt-[15px] rounded-[180px] font-[600]">
-                  Discover Now <i class="bi bi-chevron-right"></i>
-                </button>
+                <a href="/novels">
+                  <button className="bg-[white] hover:bg-[#102327] hover:text-[white] p-[12px] w-[180px] mt-[15px] rounded-[180px] font-[600]">
+                    Discover Now <i class="bi bi-chevron-right"></i>
+                  </button>
+                </a>
               </div>
             </section>
           </section>

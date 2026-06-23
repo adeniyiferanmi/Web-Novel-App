@@ -29,13 +29,14 @@ const LoginPage = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(userSchema),
   });
 
   const onSubmit = (data) => {
-    login(data);
+    login(data, setError);
   };
   const handleGoogleLogin = () => {
     googleLogin();
@@ -113,7 +114,7 @@ const LoginPage = () => {
               className="bg-white block border-1 border-[#80808060] p-[13px] rounded-xl w-[100%]"
               {...register("email")}
             />
-            {errors.Profile && (
+            {errors.email && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.email.message}
               </p>
@@ -125,7 +126,7 @@ const LoginPage = () => {
                 className="bg-white block border-1 border-[#80808060] p-[13px] rounded-xl w-[100%] mt-[20px]"
                 {...register("password")}
               />
-              {errors.Profile && (
+              {errors.password && (
                 <p className="text-red-500 text-sm mt-1">
                   {errors.password.message}
                 </p>
@@ -144,9 +145,13 @@ const LoginPage = () => {
             >
               Forgot Password?
             </a>
+            {errors.root && (
+              <p className="text-red-500 text-sm text-center mt-2">
+                {errors.root.message}
+              </p>
+            )}
             <button className="block bg-linear-to-r from-[#EBAF44] to-[#F87618] w-[100%] p-[15px] text-[1.2rem] rounded-full mt-[20px] font-bold">
               {signingIn ? "Signing In..." : "Log In"}
-              {/* Log In <i class="bi bi-arrow-right "></i> */}
             </button>
           </form>
           <div className="flex text-center mt-[20px] text-[#8080807e]">

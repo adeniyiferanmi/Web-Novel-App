@@ -9,7 +9,7 @@ const AuthorDashboardPage = () => {
   const { setActiveTab, activeTab } = useContext(AuthContext);
   return (
     <div className="">
-      <Header />
+      <Header logoLink="/dashboard" />
       <div className="bg-[#FAF7F0] pt-[200px] pb-[100px]">
         <div className="w-[95%] m-auto flex gap-[50px]">
           <Sidebar />
