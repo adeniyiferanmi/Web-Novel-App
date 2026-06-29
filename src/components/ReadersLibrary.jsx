@@ -42,7 +42,7 @@ const ReadersLibrary = () => {
               </p>
 
               <a
-                href="/dashboard"
+                href="/novels"
                 className="inline-block mt-6 bg-[#027A36] text-white px-6 py-3 rounded-full hover:bg-[#025d2a] transition"
               >
                 Discover Novels
@@ -103,7 +103,7 @@ const ReadersLibrary = () => {
                       )}
 
                       <a
-                        href={`/novel/${item.novel._id}`}
+                        href={`/read/${item.novel._id}`}
                         className="w-10 h-10 border border-gray-200 rounded-lg flex items-center justify-center hover:bg-gray-50"
                       >
                         <i className="bi bi-info-circle"></i>
