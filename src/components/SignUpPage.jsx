@@ -41,12 +41,8 @@ const SignUpPage = () => {
     penName: yup.string(),
     Profile: yup
       .string()
-      .oneOf(["I'm an Author", "I'm a Reader"], "Please select a profile")
-      .required("Profile is required"),
-    agreedToTerms: yup
-      .boolean()
-      .oneOf([true], "You must accept the terms")
-      .required(),
+      .oneOf(["Author", "Reader"], "Please select a profile")
+      .required("Profile is required"), // ✅ full strings
   });
 
   const {
@@ -65,20 +61,23 @@ const SignUpPage = () => {
       password: "",
       confirmPassword: "",
       penName: "",
-      Profile: "",
+      Profile: localStorage.getItem("profile") || "Reader",
     },
   });
 
   const handlePickProfile = (profiler) => {
     setPick(profiler);
-    setValue("Profile", profiler.title.trim(), { shouldValidate: true });
+    localStorage.setItem("profile", profiler.title);
+    setValue("Profile", profiler.title.trim());
     clearErrors("Profile");
   };
 
   const onSubmit = (data) => {
     signup(data, setError);
   };
-
+  const handleGoogleLogin = () => {
+    googleLogin();
+  };
   return (
     <div className="bg-linear-to-r from-[#40223E] to-[#2E2939] py-[30px]">
       <div className="w-[600px] m-auto bg-[#EEE9E1] p-[50px] rounded-2xl">
@@ -97,7 +96,7 @@ const SignUpPage = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* profile picker */}
           <div className="flex gap-[20px]">
-            {profiles.map((profiler) => (
+            {profiles.map((profiler, key) => (
               <div
                 className="p-[20px] rounded-2xl w-[237px] cursor-pointer"
                 key={profiler.id}
@@ -212,7 +211,7 @@ const SignUpPage = () => {
           )}
 
           <div className="flex gap-[10px] mt-[20px]">
-            <input type="checkbox" {...register("agreedToTerms")} />
+            <input type="checkbox" required />
             <p className="text-[#00000080] font-serif text-[0.9rem]">
               I agree to the
               <a href="#" className="ml-[5px] font-serif text-[#EEA73F]">
@@ -224,11 +223,6 @@ const SignUpPage = () => {
               </a>
             </p>
           </div>
-          {errors.agreedToTerms && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.agreedToTerms.message}
-            </p>
-          )}
 
           {errors.root && (
             <p className="text-red-500 text-sm text-center mt-2">
@@ -250,7 +244,6 @@ const SignUpPage = () => {
             <span className="flex-1 border-b border-gray-300" />
           </div>
 
-          {/* google */}
           <div className="flex justify-center bg-white border-1 rounded-2xl border-[#8080806b] p-[12px] mt-[30px]">
             <button type="button" onClick={googleLogin} className="flex">
               <img src={image4} alt="" className="w-[20px] mr-[10px]" />
